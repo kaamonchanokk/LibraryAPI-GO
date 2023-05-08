@@ -40,7 +40,8 @@ func GetAuthors(c *gin.Context) {
 func CreateAuthor(c *gin.Context) {
 	var author model.Author
 	var response model.Response
-
+	var count int64
+	var authorCode string
 	//จาก JSON -> author
 	if err := c.BindJSON(&author); err != nil {
 		response.Status = http.StatusBadRequest
@@ -49,13 +50,24 @@ func CreateAuthor(c *gin.Context) {
 		return
 	}
 	//เช็คค่าว่ามีครบไหม
-	if author.AUTHOR_ADDRESS == nil || author.AUTHOR_CODE == nil || author.AUTHOR_NAME == nil {
+	if author.AUTHOR_ADDRESS == nil || author.AUTHOR_NAME == nil {
 		response.Status = http.StatusNotFound
 		response.Message = "Incomplete input values"
 		c.JSON(http.StatusNotFound, response)
 		return
 	}
 	db := config.Connect()
+
+	//gen authorCode
+	if err := db.Table("author").Count(&count).Error; err != nil {
+		response.Status = http.StatusInternalServerError
+		response.Message = err.Error()
+		c.JSON(http.StatusInternalServerError, response)
+		return
+	}
+	authorCode = fmt.Sprintf("A%03d", count+1)
+	author.AUTHOR_CODE = &authorCode
+
 	//เพิ่มค่า
 	if err := db.Table("author").Create(&author).Error; err != nil {
 		response.Status = http.StatusInternalServerError
@@ -91,13 +103,18 @@ func UpdateAuthor(c *gin.Context) {
 
 	//บันทึกการแก้ไข
 	fmt.Println(author)
-	if err := db.Table("author").Save(&author).Error; err != nil {
+	// if err := db.Table("author").Save(&author).Error; err != nil {
+	// 	response.Status = http.StatusInternalServerError
+	// 	response.Message = err.Error()
+	// 	c.JSON(http.StatusInternalServerError, response)
+	// 	return
+	// }
+	if err := db.Table("author").Where("AUTHOR_ID = ?", author.AUTHOR_ID).Updates(map[string]interface{}{"AUTHOR_NAME": author.AUTHOR_NAME, "AUTHOR_ADDRESS": author.AUTHOR_ADDRESS}).Error; err != nil {
 		response.Status = http.StatusInternalServerError
 		response.Message = err.Error()
 		c.JSON(http.StatusInternalServerError, response)
 		return
 	}
-
 	response.Status = http.StatusOK
 	response.Message = "Author updated successfully"
 
@@ -110,10 +127,10 @@ func DeleteAuthor(c *gin.Context) {
 
 	db := config.Connect()
 
-	authorCode := c.Query("authorCode")
+	authorId := c.Query("authorId")
 
 	//เช็คว่ามีตัวที่ลบไหมจาก Code
-	if err := db.Where("AUTHOR_CODE = ?", authorCode).First(&author).Error; err != nil {
+	if err := db.Where("AUTHOR_ID = ?", authorId).First(&author).Error; err != nil {
 		response.Status = http.StatusNotFound
 		response.Message = "Author not found"
 		c.JSON(http.StatusNotFound, response)
@@ -121,7 +138,7 @@ func DeleteAuthor(c *gin.Context) {
 	}
 	fmt.Println(author)
 	// ลบ author
-	if err := db.Table("author").Where("AUTHOR_CODE = ?", authorCode).Delete(&authorCode).Error; err != nil {
+	if err := db.Table("author").Where("AUTHOR_ID = ?", authorId).Delete(&authorId).Error; err != nil {
 		response.Status = http.StatusInternalServerError
 		response.Message = err.Error()
 		c.JSON(http.StatusInternalServerError, response)
