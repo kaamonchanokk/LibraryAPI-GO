@@ -24,5 +24,12 @@ func Router() *gin.Engine {
 	router.POST("/insertStudent", controller.InsertStudent)
 	router.PUT("/updateStudent", controller.UpdateStudent)
 	router.DELETE("/deleteStudent",controller.DeleteStudent)
+
+	//----------------Status------------------------//
+	router.GET("/getStatus", controller.GetStatus)
+	router.POST("/insertStatus", controller.InsertStatus)
+	router.PUT("/updateStatus", controller.UpdateStatus)
+	router.DELETE("/deleteStatus",controller.DeleteStatus)
+
 	return router
 }
