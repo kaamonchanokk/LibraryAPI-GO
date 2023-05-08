@@ -14,7 +14,7 @@ func Router() *gin.Engine {
 	router.GET("/getAuthor", controller.GetAuthors)
 	router.POST("/insertAuthor", controller.CreateAuthor)
 	router.PUT("/updateAuthor", controller.UpdateAuthor)
-	router.DELETE("/deleteAuthor/:id", controller.DeleteAuthor)
+	router.DELETE("/deleteAuthor", controller.DeleteAuthor)
 	// router.GET("/authorbyid/", authorController.GetAuthorById)
 	return router
 }
