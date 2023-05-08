@@ -13,23 +13,17 @@ func GetAuthors(c *gin.Context) {
 	var author []model.Author
 	var response model.AuthorResponse
 	var responseError model.Response
-	id := c.Query("authorId")
+	authorId := c.Query("authorId")
+	authorCode := c.Query("authorCode")
+	authorName := c.Query("authorName")
+
 	db := config.Connect()
 
-	if id == "" {
-		if err := db.Table("author").Find(&author).Error; err != nil {
-			responseError.Status = http.StatusInternalServerError
-			responseError.Message = err.Error()
-			c.JSON(http.StatusInternalServerError, responseError)
-			return
-		}
-	} else {
-		if err := db.Table("author").First(&author, id).Error; err != nil {
-			responseError.Status = http.StatusNotFound
-			responseError.Message = "Author not found"
-			c.JSON(http.StatusNotFound, responseError)
-			return
-		}
+	if err := db.Table("author").Where("(AUTHOR_NAME LIKE ? OR ? = '' ) AND (AUTHOR_ID = ? OR ? = '') AND (AUTHOR_CODE = ? OR ? = '') ", "%"+authorName+"%", authorName, authorId, authorId, authorCode, authorCode).Order("AUTHOR_ID asc").Find(&author).Error; err != nil {
+		responseError.Status = http.StatusInternalServerError
+		responseError.Message = err.Error()
+		c.JSON(http.StatusInternalServerError, responseError)
+		return
 	}
 	response.Status = http.StatusOK
 	response.Message = "Success"

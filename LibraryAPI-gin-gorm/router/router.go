@@ -11,10 +11,18 @@ func Router() *gin.Engine {
 	router.Use(gin.Logger())
 	router.Use(gin.Recovery())
 
+	//----------------Author------------------------//
+
 	router.GET("/getAuthor", controller.GetAuthors)
 	router.POST("/insertAuthor", controller.CreateAuthor)
 	router.PUT("/updateAuthor", controller.UpdateAuthor)
 	router.DELETE("/deleteAuthor", controller.DeleteAuthor)
 	// router.GET("/authorbyid/", authorController.GetAuthorById)
+
+	//----------------Student------------------------//
+	router.GET("/getStudent", controller.GetStudent)
+	router.POST("/insertStudent", controller.InsertStudent)
+	router.PUT("/updateStudent", controller.UpdateStudent)
+	router.DELETE("/deleteStudent",controller.DeleteStudent)
 	return router
 }
