@@ -33,8 +33,15 @@ func Router() *gin.Engine {
 
 	//----------------Book------------------------//
 	router.GET("/getBook", controller.GetBooks) //กว่าจะทำเป็น5555555
-	router.POST("/insertBook",controller.InsertBook)
-	router.PUT("/updateBook",controller.UpdateBook)
-	router.DELETE("/deleteBook",controller.DeleteBook)
+	router.POST("/insertBook", controller.InsertBook)
+	router.PUT("/updateBook", controller.UpdateBook)
+	router.DELETE("/deleteBook", controller.DeleteBook)
+
+	//----------------Category------------------------//
+	router.GET("/getCategory", controller.GetCategory)
+	router.POST("/insertCategory", controller.InsertCategory)
+	router.PUT("/updateCategory", controller.UpdateCategory)
+	router.DELETE("/deleteCategory", controller.DeleteCategory)
+
 	return router
 }

@@ -8,3 +8,8 @@ type Category struct {
 func (category *Category) TableName() string {
 	return "category"
 }
+type CategoryResponse struct {
+	Status  int    `json:"status"`
+	Message string `json:"message"`
+	Data    []Category
+}
