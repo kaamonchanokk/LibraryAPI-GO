@@ -23,13 +23,18 @@ func Router() *gin.Engine {
 	router.GET("/getStudent", controller.GetStudent)
 	router.POST("/insertStudent", controller.InsertStudent)
 	router.PUT("/updateStudent", controller.UpdateStudent)
-	router.DELETE("/deleteStudent",controller.DeleteStudent)
+	router.DELETE("/deleteStudent", controller.DeleteStudent)
 
 	//----------------Status------------------------//
 	router.GET("/getStatus", controller.GetStatus)
 	router.POST("/insertStatus", controller.InsertStatus)
 	router.PUT("/updateStatus", controller.UpdateStatus)
-	router.DELETE("/deleteStatus",controller.DeleteStatus)
+	router.DELETE("/deleteStatus", controller.DeleteStatus)
 
+	//----------------Book------------------------//
+	router.GET("/getBook", controller.GetBooks) //กว่าจะทำเป็น5555555
+	router.POST("/insertBook",controller.InsertBook)
+	router.PUT("/updateBook",controller.UpdateBook)
+	router.DELETE("/deleteBook",controller.DeleteBook)
 	return router
 }
