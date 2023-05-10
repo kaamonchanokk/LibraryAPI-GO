@@ -43,5 +43,11 @@ func Router() *gin.Engine {
 	router.PUT("/updateCategory", controller.UpdateCategory)
 	router.DELETE("/deleteCategory", controller.DeleteCategory)
 
+	//----------------Borrow------------------------//
+	router.GET("/getBorrow",controller.GetBorrowReport)
+	router.POST("/insertBorrow",controller.InsertBorrow)
+	router.PUT("/updateBorrow",controller.UpdateDateBorrow)
+	router.PUT("/updateStatusBorrow",controller.UpdateStatusBorrow)
+	router.DELETE("/deleteBorrow", controller.DeleteBorrow)
 	return router
 }
